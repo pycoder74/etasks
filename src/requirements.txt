@@ -1,0 +1,6 @@
+tk
+datetime
+python-weather
+asyncio
+pyodbc
+pandas

@@ -1,0 +1,12 @@
+﻿SQLite format 3@  ._
+"ï¿½ï¿½ï¿½""!!!ï¿½tabletaskstasksCREATE TABLE tasks ("
+      id INTEGER PRIMARY KEY
+      name TEXT NOT NULL UNIQUE
+      priority TEXT NOT NULL
+      sDate TEXT
+      eDate TEXT
+      sTime TEXT
+      eTime TEXT
+    )K!m!indexsqlite_autoindex_tasks_1tasks
+ï¿½ï¿½L!%1!! eos high today tomorrow lateeapry
+"ï¿½ï¿½	 eos"
