@@ -15,7 +15,6 @@ class QuickBar(tk.Frame):
     def __init__(self, master=None):
         #master is changed to window when called in program.
         super().__init__(master)
-        
         #frame to house the information in the quickbar
         infoframe = tk.Frame(relief="groove", highlightbackground="black", highlightthickness=1)
         infoframe.pack(fill=X)
@@ -28,10 +27,8 @@ class QuickBar(tk.Frame):
         
         tempfrme=tk.Frame(infoframe, relief="groove", highlightbackground="black", highlightthickness=1)
         tempfrme.pack(side=tk.LEFT, anchor='n', pady=5, padx=5, fill=X)
-        global ctemp
         ctemp=tk.Label(tempfrme, font=('calibri', 20))
         ctemp.pack(anchor='n', side=tk.LEFT, padx=100)
-        
         today = date.today()
         cdate = today.strftime("%d/%m/%Y")
         
@@ -55,6 +52,9 @@ class QuickBar(tk.Frame):
         time()
     global getweather
     global current_temp
+def ctemp_update():
+    ctemp.configure(text=current_temp)
+    global getweather
     async def getweather():
         url=f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Bristol"
         params = {
@@ -71,7 +71,7 @@ class QuickBar(tk.Frame):
                 current_temp = jsonData['currentConditions']['temp']
                 current_temp = f"{current_temp}°C"
                 print(current_temp)
-                ctemp.configure(text=current_temp)
+                ctemp_update()
 
             
             
