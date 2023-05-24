@@ -20,13 +20,8 @@ import pyodbc
 import pandas as pd
 import sys
 import venv
-venv_dir = os.path.join(os.getcwd(), 'etasks_venv')
-print(f'venv_dir = {venv_dir}')
-venv.create(venv_dir, system_site_packages=False, clear=True)
-print('venv created')
-print('activating venv')
-activate_path=os.path.join(venv_dir, 'Scripts', 'activate.bat')
-print('activated')
+import loadT
+from loadT import load_t
 todohome=tk.Tk()
 todohome.state('zoomed')
 todohome.title('eTasks')
@@ -50,47 +45,8 @@ maingrpfrme=tk.LabelFrame(todohome, text='Groups', labelanchor='n', font=('Calib
 maingrpfrme.pack_propagate(False)
 maingrpfrme.pack(anchor='nw', side=tk.LEFT, fill=BOTH, padx=10, pady=5, expand=True)
 
-
+loadT.load_t(maintskfrme)
  
-def loadT():
-    global notasklbl
-    conn=pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\ellio_6\Desktop\Coding\etasks-main\src\tasksdb.accdb')
-    cursor=conn.cursor()
-    with cursor as source_cursor:
-        source_cursor.execute('select count(*) from TaskDB')
-        tasks_num=cursor.fetchall()
-        num_str=str(tasks_num)
-        tasks_num=''.join(i for i in num_str if i not in "[]()'',")
-        print(f'Number of tasks to load: {tasks_num}')
-        num_int=int(tasks_num)
-        if num_int == 0:
-            notasklbl=tk.Label(maintskfrme, text='No tasks here. Create a new one by clicking + Add Task button')
-            notasklbl.pack(side=tk.TOP, anchor='center')
-        else:
-            source_cursor.execute('select * from TaskDB')
-            field_names = [i[0] for i in source_cursor.description]
-            field_names = ''.join(field_names)
-                
-            fetched_data = source_cursor.fetchmany(num_int)
-            fetched_d=str(fetched_data)
-            fetched_d=''.join(i for i in fetched_d if i not in "[]()'',")
-            print(fetched_d)
-            for i in range(0, num_int):
-                taskname = fetched_data[i][0]
-                print(taskname)
-                priority=fetched_data[i][1]
-                print(priority)
-                group=fetched_data[i][2]
-                print(group)
-                sDate=fetched_data[i][3]
-                print(sDate)
-                eDate=fetched_data[i][4]
-                print(eDate)
-                sTime=fetched_data[i][5]
-                print(sTime)
-                eTime=fetched_data[i][6]
-                print(f'{eTime} \n')
-                loaded_task=nt.nTask(taskname, sDate, eDate, maintskfrme)
 def loadG():
     global nogrouplbl
     conn=pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\ellio_6\Desktop\Coding\etasks-main\src\tasksdb.accdb')
