@@ -10,6 +10,8 @@ import requests
 import os
 import asyncio
 import aiohttp
+from getweather import get_weather
+import getweather as gw
 class QuickBar(tk.Frame):
     '''class for Tk widget quickbar'''
     def __init__(self, master=None):
@@ -27,11 +29,10 @@ class QuickBar(tk.Frame):
         
         tempfrme=tk.Frame(infoframe, relief="groove", highlightbackground="black", highlightthickness=1)
         tempfrme.pack(side=tk.LEFT, anchor='n', pady=5, padx=5, fill=X)
-        ctemp=tk.Label(tempfrme, font=('calibri', 20))
-        ctemp.pack(anchor='n', side=tk.LEFT, padx=100)
+        asyncio.run(gw.get_weather(tempfrme))
+
         today = date.today()
         cdate = today.strftime("%d/%m/%Y")
-        
         dateframe=tk.Frame(infoframe, relief="groove", highlightbackground="black", highlightthickness=1)
         datecal=Label(dateframe, font=('calibri', 20), foreground='black', text=cdate)
         datecal.pack(anchor='center', side=tk.LEFT, padx=100)
@@ -50,34 +51,10 @@ class QuickBar(tk.Frame):
         clock=Label(clockfrme, font=('calibri', 20), foreground='black')
         clock.pack(anchor='center', side=tk.LEFT, padx=100)
         time()
-    global getweather
-    global current_temp
-def ctemp_update():
-    ctemp.configure(text=current_temp)
-    global getweather
-    async def getweather():
-        url=f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Bristol"
-        params = {
-            "unitGroup": "metric",
-            "include": "current",
-            "key": "5H2F2M6K2X4E9LXKH7UP3DNMQ",
-            "contentType": "json"
-        }
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, params=params) as response:
-                if response.status != 200:
-                    print('Unexpected status code:', response.status)
-                jsonData = await response.json()
-                current_temp = jsonData['currentConditions']['temp']
-                current_temp = f"{current_temp}°C"
-                print(current_temp)
-                ctemp_update()
-
             
             
 
 if __name__ == '__main__':
     root = tk.Tk()
-    asyncio.run(getweather())
     QuickBar(master=root)
     root.mainloop()
