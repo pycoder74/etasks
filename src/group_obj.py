@@ -8,7 +8,7 @@ class group(tk.Frame):
         self.name=tk.Label(master, text=name)
         self.name.pack(padx=20)
 
-        conn=pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\ellio_6\Desktop\Coding\etasks-main\src\tasksdb.accdb')
+        conn=pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:/Users/19E.Kelly/Downloads/etasks-main/src/tasksdb.accdb')
         cursor=conn.cursor()
         with cursor as source_cursor:
             source_cursor.execute('select count(*) from TaskDB')
