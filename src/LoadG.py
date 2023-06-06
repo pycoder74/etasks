@@ -2,11 +2,9 @@ import pyodbc
 import group_obj as go
 import tkinter as tk
 from tkinter import*
-win=tk.Tk()
-grpfrme=tk.Frame(win, relief='groove', highlightbackground='black', highlightthickness=1, width=500).pack(anchor='n', side=tk.TOP, fill=X)
-def loadG():
+def loadG(master=None):
     global nogrouplbl
-    conn=pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\ellio_6\Desktop\etasks-main\src\tasksdb.accdb')
+    conn=pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:/Users/19E.Kelly/Downloads/etasks-main/src/tasksdb.accdb')
     cursor=conn.cursor()
     with cursor as source_cursor:
         source_cursor.execute('select count(*) from TaskDB where Location is not Null')
@@ -29,10 +27,11 @@ def loadG():
             for i in range(0, num_int):
                 groupname=fetched_data[i][2]
                 print(groupname)
-                loaded_group=go.group(groupname, grpfrme)
+                loaded_group=go.group(groupname, master)
                 loaded_group.pack()
-
-loadG()
+if __name__ == '__main__':
+    win=tk.Tk()
+    loadG(win)
 
             
     
