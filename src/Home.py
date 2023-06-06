@@ -22,6 +22,7 @@ import sys
 import venv
 import loadT
 from loadT import load_t
+from LoadG import loadG
 todohome=tk.Tk()
 todohome.state('zoomed')
 todohome.title('eTasks')
@@ -47,36 +48,6 @@ maingrpfrme.pack(anchor='nw', side=tk.LEFT, fill=BOTH, padx=10, pady=5, expand=T
 
 loadT.load_t(maintskfrme)
  
-def loadG():
-    global nogrouplbl
-    conn=pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\ellio_6\Desktop\Coding\etasks-main\src\tasksdb.accdb')
-    cursor=conn.cursor()
-    with cursor as source_cursor:
-        source_cursor.execute('select count(*) from TaskDB where Location is not Null')
-        g_num=cursor.fetchall()
-        num_str=str(g_num)
-        g_num=''.join(i for i in num_str if i not in "[]()'',")
-        print(f'Number of groups to load: {g_num}')
-        num_int=int(g_num)
-        if num_int == 0:
-            nogrouplbl=tk.Label(maingrpfrme, text='No groups to load')
-            nogrouplbl.pack(side=tk.TOP, padx=10, anchor='center')
-        else:
-            source_cursor.execute('select * from TaskDB where Location is not Null')
-            field_names = [i[0] for i in source_cursor.description]
-            field_names = ''.join(field_names)
-
-            fetched_data = source_cursor.fetchmany(num_int)
-            fetched_d=str(fetched_data)
-            fetched_d=''.join(i for i in fetched_d if i not in "[]()'',")
-            print(fetched_d)
-            for i in range(0, num_int):
-                groupname=fetched_data[i][2]
-                print(groupname)
-                loaded_group=go.group(groupname, maingrpfrme)
-                loaded_group.pack()
-
-
             
 def newtaskwin():
     #window is shown when create task button is pressed.
@@ -119,7 +90,7 @@ def newtaskwin():
         eDate=end_date_entry.get()
         sTime=start_time_entry.get()
         eTime=end_time_entry.get()
-        conn=pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\ellio_6\Desktop\Coding\etasks-main\src\tasksdb.accdb')
+        conn=pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:/Users/19E.Kelly/Downloads/etasks-main/src/tasksdb.accdb')
         cursor=conn.cursor()
         sql="insert into TaskDB values ('{taskName}', '{priorityName}', '{groupName}', '{startDate}', '{endDate}', '{startTime}', '{endTime}')".format(
             taskName=tName, priorityName=pName, groupName = gName, startDate = sDate, endDate = eDate, startTime = sTime, endTime = eTime)
@@ -148,7 +119,7 @@ def newgroupwin():
     groupname_ent.grid(row=1, column=1)
 
     def add_group():
-        conn=pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\ellio_6\Desktop\Coding\etasks-main\src\tasksdb.accdb')
+        conn=pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:/Users/19E.Kelly/Downloads/etasks-main/src/tasksdb.accdb')
         cursor=conn.cursor()
         cursor.execute('select count(*) from TaskDB')
         tasks_num=cursor.fetchall()
@@ -171,9 +142,8 @@ def newgroupwin():
         
 cgroupbtn.configure(command=newgroupwin) 
     
-loadG()    
-loadT()
+loadG(maingrpfrme)    
+load_t()
 
 
     
-
