@@ -14,7 +14,9 @@ async def get_weather(master=None):
       
       # Parse the results as JSON
       jsonData = json.load(ResultBytes)
-      print(jsonData['currentConditions'])
+      ctemp = jsonData['currentConditions']
+      ctemp = tk.Label(master, text=ctemp)
+      ctemp.pack()
     except urllib.error.HTTPError  as e:
       ErrorInfo= e.read().decode() 
       print('Error code: ', e.code, ErrorInfo)
@@ -23,6 +25,7 @@ async def get_weather(master=None):
       ErrorInfo= e.read().decode() 
       print('Error code: ', e.code,ErrorInfo)
       sys.exit()
+      
 if __name__ == '__main__':
     win=tk.Tk()
     asyncio.run(get_weather(win))
