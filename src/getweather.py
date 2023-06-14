@@ -7,16 +7,18 @@ from datetime import datetime
 import urllib.request
 import sys
 import json
-
+import re
 async def get_weather(master=None):
     try: 
       ResultBytes = urllib.request.urlopen("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Bristol?unitGroup=metric&elements=temp&include=current%2Cfcst&key=3UQS226XB878JKZZPG2JDJWDQ&contentType=json")
       
       # Parse the results as JSON
       jsonData = json.load(ResultBytes)
-      ctemp = jsonData['currentConditions']
-      ctemp = tk.Label(master, text=ctemp)
-      ctemp.pack()
+      print(jsonData)
+      ctemp = jsonData['currentConditions']['temp']
+      ctemp = f"{ctemp}°C"
+      ctemp = tk.Label(master,  font=('calibri', 20), text=ctemp)
+      ctemp.pack(anchor='n', side=tk.LEFT, padx=100)
     except urllib.error.HTTPError  as e:
       ErrorInfo= e.read().decode() 
       print('Error code: ', e.code, ErrorInfo)
